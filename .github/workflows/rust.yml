@@ -89,10 +89,10 @@ jobs:
       - uses: ./.github/actions/cargo_home_cache
       - uses: ./.github/actions/cargo_target_dir_cache
       - run: |
-          old_hash=`sha512sum Cargo.lock | cut -d " " -f 1`
+          old_hash=`sha384sum Cargo.lock`
           rm Cargo.lock
           RUSTFLAGS='--cfg tokio_unstable -Dwarnings' cargo check
-          expected_hash=`sha512sum Cargo.lock | cut -d " " -f 1`
+          expected_hash=`sha384sum Cargo.lock`
           if [ "$old_hash" = "$expected_hash" ]; then
               echo "Cargo.lock hash matches CI-generated Cargo.lock hash"
           else
