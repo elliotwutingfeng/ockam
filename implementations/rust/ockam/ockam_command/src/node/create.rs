@@ -28,7 +28,12 @@ use ockam::{Address, AsyncTryClone, NodeBuilder, TCP};
 use ockam::{Context, TcpTransport};
 use ockam_api::{
     nodes::models::transport::{TransportMode, TransportType},
-    nodes::{NodeManager, NodeManagerWorker, NODEMANAGER_ADDR},
+    nodes::{
+        service::{
+            NodeManagerGeneralOptions, NodeManagerProjectsOptions, NodeManagerTransportOptions,
+        },
+        NodeManager, NodeManagerWorker, NODEMANAGER_ADDR,
+    },
 };
 use ockam_core::LOCAL;
 
@@ -300,16 +305,22 @@ async fn run_background_node_impl(
     let projects = cfg.inner().lookup().projects().collect();
     let node_man = NodeManager::create(
         ctx,
-        c.node_name.clone(),
-        node_dir,
-        identity_override,
-        c.skip_defaults || c.launch_config.is_some(),
-        c.enable_credential_checks,
-        Some(&cfg.authorities(&c.node_name)?.snapshot()),
-        project_id,
-        projects,
-        (TransportType::Tcp, TransportMode::Listen, bind),
-        tcp.async_try_clone().await?,
+        NodeManagerGeneralOptions::new(
+            c.node_name.clone(),
+            node_dir,
+            c.skip_defaults || c.launch_config.is_some(),
+            c.enable_credential_checks,
+            identity_override,
+        ),
+        NodeManagerProjectsOptions::new(
+            Some(&cfg.authorities(&c.node_name)?.snapshot()),
+            project_id,
+            projects,
+        ),
+        NodeManagerTransportOptions::new(
+            (TransportType::Tcp, TransportMode::Listen, bind),
+            tcp.async_try_clone().await?,
+        ),
     )
     .await?;
     let node_manager_worker = NodeManagerWorker::new(node_man);

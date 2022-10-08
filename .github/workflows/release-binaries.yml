@@ -26,7 +26,7 @@ jobs:
       tag_name: ${{ steps.release_version.outputs.tag_name }}
     steps:
       - name: Checkout Ockam
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
         with:
           fetch-depth: 0
           ref: ${{ github.event.inputs.release_branch }}
@@ -221,7 +221,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout repository
-      uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+      uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
       with:
         ref: ${{ github.event.inputs.release_branch }}
 
@@ -276,7 +276,7 @@ jobs:
         ls $GITHUB_WORKSPACE
 
     - name: Install Cosign
-      uses: sigstore/cosign-installer@f3c664df7af409cb4873aa5068053ba9d61a57b6
+      uses: sigstore/cosign-installer@7cc35d7fdbe70d4278a0c96779081e6fac665f88
 
     - name: Sign Binary
       shell: bash
@@ -329,7 +329,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
         with:
           ref: ${{ github.event.inputs.release_branch }}
 
@@ -367,7 +367,7 @@ jobs:
 
       - name: Install Cosign
         if: matrix.build == 'macos'
-        uses: sigstore/cosign-installer@f3c664df7af409cb4873aa5068053ba9d61a57b6
+        uses: sigstore/cosign-installer@7cc35d7fdbe70d4278a0c96779081e6fac665f88
 
       - name: Sign NIFs
         if: matrix.build == 'macos'
@@ -419,7 +419,7 @@ jobs:
         run: shasum -a 256 ockam.* > sha256sums.txt
 
       - name: Install Cosign
-        uses: sigstore/cosign-installer@f3c664df7af409cb4873aa5068053ba9d61a57b6
+        uses: sigstore/cosign-installer@7cc35d7fdbe70d4278a0c96779081e6fac665f88
 
       - name: Sign Files
         shell: bash
