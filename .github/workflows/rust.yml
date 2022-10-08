@@ -86,6 +86,10 @@ jobs:
       - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
         with:
           ref: ${{ github.event.inputs.commit_sha }}
+      - uses: technote-space/get-diff-action@v4
+        id: git-diff
+        with:
+          PATTERNS: ./Cargo.lock
       - uses: ./.github/actions/cargo_home_cache
       - uses: ./.github/actions/cargo_target_dir_cache
       - run: |
@@ -98,6 +102,7 @@ jobs:
           else
               echo "Cargo.lock hash does not match CI-generated Cargo.lock hash. Expected: $expected_hash Got: $old_hash" && exit 1
           fi
+        if: env.GIT_DIFF_FILTERED
       - uses: ./.github/actions/cargo_target_dir_pre_cache
 
   build_docs:
