@@ -33,7 +33,8 @@ jobs:
           ref: ${{ github.event.inputs.commit_sha }}
       - uses: ./.github/actions/cargo_home_cache
       - uses: ./.github/actions/cargo_target_dir_cache
-      - run: |
+      - name: Check whether Cargo.lock is same as CI-generated Cargo.lock
+        run: |
           old_hash=`sha384sum Cargo.lock`
           rm Cargo.lock
           RUSTFLAGS='--cfg tokio_unstable -Dwarnings' cargo check
