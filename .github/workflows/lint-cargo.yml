@@ -35,10 +35,10 @@ jobs:
       - uses: ./.github/actions/cargo_target_dir_cache
       - name: Check whether Cargo.lock is same as CI-generated Cargo.lock
         run: |
-          old_hash=`sha384sum Cargo.lock`
+          old_hash=`sha3sum -a 512 Cargo.lock`
           rm Cargo.lock
           RUSTFLAGS='--cfg tokio_unstable -Dwarnings' cargo check
-          expected_hash=`sha384sum Cargo.lock`
+          expected_hash=`sha3sum -a 512 Cargo.lock`
           if [ "$old_hash" = "$expected_hash" ]; then
               echo "Cargo.lock hash matches CI-generated Cargo.lock hash"
           else
